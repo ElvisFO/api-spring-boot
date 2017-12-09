@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.example.api.model.enums.TipoPagamento;
 
@@ -24,12 +26,16 @@ public class Lancamento implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long codigo;
 	
+	@NotNull
+	@Size(min=5, max=200)
 	private String descricao;
 	
+	@NotNull
 	@Column(name="tipo_pagamento")
 	@Enumerated(EnumType.STRING)
 	private TipoPagamento tipoPagamento;
 	
+	@NotNull
 	private BigDecimal valor;
 
 	public Long getCodigo() {

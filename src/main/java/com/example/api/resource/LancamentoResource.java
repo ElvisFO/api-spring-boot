@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class LancamentoResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Lancamento lancamento, HttpServletResponse response)
+	public ResponseEntity<?> save(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response)
 	{
 		Lancamento lancamentoSalvo = lancamentoRepository.save(lancamento);
 		URI uri =  ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
