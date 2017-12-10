@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.api.event.RecursoCriadoEvent;
 import com.example.api.model.Lancamento;
 import com.example.api.repository.LancamentoRepository;
+import com.example.api.service.LancamentoService;
 
 @RestController
 @RequestMapping("/lancamentos")
@@ -31,6 +33,9 @@ public class LancamentoResource {
 	
 	@Autowired
 	private ApplicationEventPublisher publisher;
+	
+	@Autowired
+	private LancamentoService lancamentoService;
 
 	@GetMapping
 	public List<Lancamento> findAll()
@@ -47,9 +52,9 @@ public class LancamentoResource {
 	}
 	
 	@GetMapping("/{codigo}")
-	public ResponseEntity<?>  findOne(@PathVariable Long codigo) {
+	public ResponseEntity<?>  findOne(@PathVariable Long codigo) 
+	{
 		Lancamento lancamento = lancamentoRepository.findOne(codigo);
-		
 		return lancamento != null ? ResponseEntity.ok(lancamento) : ResponseEntity.notFound().build();
 	}
 	
@@ -58,6 +63,13 @@ public class LancamentoResource {
 	public void delete(@PathVariable Long codigo)
 	{
 		lancamentoRepository.delete(codigo);
+	}
+	
+	@PutMapping("/{codigo}")
+	public ResponseEntity<Lancamento> update(@PathVariable Long codigo, @Valid @RequestBody Lancamento lancamento)
+	{
+		Lancamento lancamentoSalvo = lancamentoService.update(codigo, lancamento);
+		return ResponseEntity.ok(lancamentoSalvo);
 	}
 	
 	
